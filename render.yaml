@@ -1,0 +1,21 @@
+# Render Blueprint — deploy straight from GitHub:
+# Render dashboard → New + → Blueprint → pick this repo. Free plan:
+# 750 instance-hours/month; the service spins down after 15 min idle and
+# takes ~1 min to wake on the next request.
+services:
+  - type: web
+    name: word-game-3d
+    runtime: node
+    plan: free
+    # db push creates all tables on Neon automatically at deploy time,
+    # so no local Node/npm step is needed on the developer machine.
+    buildCommand: npm install && npx prisma db push --skip-generate && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/admin/password   # public, DB-free, always {ok:true}
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false   # Neon connection string (postgresql://…?sslmode=require)
+      - key: ADMIN_TOKEN
+        sync: false   # strong password for the first /admin login (کادر امن)

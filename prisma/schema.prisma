@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // PostgreSQL on Neon's free plan (works with Supabase / any Postgres too)
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============ Accounts — cross-device sync (بخش ۱۲) ============
+
+/// Player account (guest play needs no account). Passwords are stored as
+/// scrypt hashes ("salt:hash"), never in plain text.
+model Account {
+  id        String    @id @default(cuid())
+  username  String    @unique
+  passHash  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  sessions  Session[]
+  snapshot  PlayerSnapshot?
+}
+
+/// Bearer session token issued by register/login. The client stores it and
+/// uses it for cloud sync; listing sessions lets a player sign out everywhere.
+model Session {
+  token     String   @id
+  accountId String
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  lastSeen  DateTime @default(now()) @updatedAt
+
+  @@index([accountId])
+}
+
+/// Latest cloud copy of the player's progress snapshot (coins, XP, stars…).
+/// Push = client uploads its state; pull = client downloads it. Last-write-wins
+/// with explicit user control (push/pull buttons on the profile screen).
+model PlayerSnapshot {
+  id        String   @id @default(cuid())
+  accountId String   @unique
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  data      String // JSON — whitelisted progress fields only (never credentials)
+  updatedAt DateTime @updatedAt
+}
+
+// ============ Admin panel (بخش ۱۷ — پنل مدیریت محتوا و مراحل) ============
+
+/// Server-side price overrides managed from the admin panel. economy-config()
+/// merges them over the bundled defaults, so price changes go live without a
+/// client update (قیمت‌ها از سرور قابل مدیریت باشند).
+model EconomyOverride {
+  key       String   @id // e.g. "pack:small" | "bundle:starter" | "vip"
+  price     Int
+  updatedAt DateTime @updatedAt
+}
+
+/// Admin panel credential (کادر امن — رمز مدیریت). Singleton row (id='admin');
+/// passHash is a scrypt digest ("salt:hash") — the plain password is never
+/// stored. Until this row exists, env ADMIN_TOKEN (or the demo default) is
+/// accepted so the owner can sign in once and set their own password.
+model AdminAuth {
+  id        String   @id
+  passHash  String
+  updatedAt DateTime @updatedAt
+}
+
+/// Custom words added from the admin panel — merged into the per-language
+/// word banks at runtime (کلمات هر زبان بانک اختصاصی خود را دارد).
+model ContentWord {
+  id        String   @id @default(cuid())
+  lang      String // fa | en
+  category  String // CategoryId
+  word      String
+  createdAt DateTime @default(now())
+
+  @@unique([lang, category, word])
+}
+
+// ============ Economy — server-verified purchases & anti-fraud ledger ============
+
+/// One record per (verified) purchase request. The unique nonce makes every
+/// purchase idempotent — replaying the same request never grants twice.
+model Purchase {
+  id          String   @id @default(cuid())
+  installId   String
+  itemId      String // pack_small | bundle_starter | vip | ...
+  kind        String // pack | bundle | vip
+  nonce       String   @unique
+  priceServer Int // price computed SERVER-side (client price is never trusted)
+  granted     Int // coins granted (0 for non-coin items)
+  createdAt   DateTime @default(now())
+
+  @@index([installId, createdAt])
+}
+
+/// Append-only ledger of every coin delta the server accepted for an install.
+/// balanceAfter lets the server detect tampering: any client report whose
+/// balanceAfter does not follow the ledger is rejected and the authoritative
+/// balance is returned to the client for self-correction.
+model CoinLedger {
+  id           String   @id @default(cuid())
+  installId    String
+  delta        Int
+  balanceAfter Int
+  reason       String // level_reward | mission | daily | purchase | spend | ad | vip | ...
+  createdAt    DateTime @default(now())
+
+  @@index([installId, createdAt])
+}
