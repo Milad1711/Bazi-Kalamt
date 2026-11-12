@@ -279,6 +279,35 @@ export function Lobby({ nav }: { nav: Nav }) {
             </div>
           }
         />
+        {/* حدس کلمه — جای خالی وسط کلمه را پر کن */}
+        <div className="col-span-2">
+          <WorldCard
+            title={t('worldGuessTitle')}
+            desc={t('worldGuessDesc')}
+            progress={fmt(bankSize('general', lang))}
+            total="∞"
+            gradient="linear-gradient(160deg,#63d4c2,#2aa895)"
+            shadow="#1c7a6c"
+            onClick={() => nav.go('guess')}
+            art={
+              <div className="flex gap-1 rotate-[-4deg]">
+                {['ک', '?', 'ل', 'م', '?'].map((l, i) => (
+                  <span
+                    key={i}
+                    className="w-6 h-7 grid place-items-center rounded-md font-black text-xs shadow-md"
+                    style={{
+                      background: l === '?' ? 'rgba(255,255,255,.35)' : 'rgba(255,255,255,.95)',
+                      border: l === '?' ? '2px dashed rgba(255,255,255,.8)' : 'none',
+                      color: l === '?' ? '#fff' : '#157a6b',
+                    }}
+                  >
+                    {l}
+                  </span>
+                ))}
+              </div>
+            }
+          />
+        </div>
       </section>
 
       {/* 14. Level map */}

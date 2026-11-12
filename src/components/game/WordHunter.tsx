@@ -22,7 +22,7 @@ import { TOTAL_WH_LEVELS } from '@/lib/game/memoryEngine';
 import { bankSize } from '@/lib/game/words';
 import { Mascot } from '@/lib/game/art';
 
-const CATEGORY_ICONS: Record<CategoryId, React.ComponentType<{ className?: string }>> = {
+export const CATEGORY_ICONS: Record<CategoryId, React.ComponentType<{ className?: string }>> = {
   animals: PawPrint, fruits: Apple, food: Utensils, countries: Globe2, cities: Building2,
   nature: TreePine, technology: Cpu, sports: Trophy, science: FlaskConical,
   movies: Clapperboard, general: BookOpen, persianWords: Languages, englishWords: CaseUpper,
@@ -355,9 +355,9 @@ function WordGame({ nav, config, onExit }: WordGameProps) {
     gridTemplateColumns: `repeat(${puzzle.size}, 1fr)`,
     maxWidth: `min(94vw, ${Math.round(470 * gridScale)}px)`,
   };
-  // letter size — bigger share of the cell so the letters are easier to read
-  // (۶۲٪ اندازه سلول در حالت پیش‌فرض؛ ضریب با تنظیم فونت بازیکن تغییر می‌کند)
-    const fontSize = `calc(${(100 / puzzle.size).toFixed(4)}cqw * ${(0.62 * letterScale).toFixed(3)})`;
+  // letter size — ۵۲٪ اندازه سلول در حالت پیش‌فرض: حروف کاملاً داخل خانه می‌مانند
+  // و لمس دقیق‌تر می‌شود؛ ضریب با تنظیم فونت بازیکن (کوچک/متوسط/بزرگ) تغییر می‌کند
+  const fontSize = `calc(${(100 / puzzle.size).toFixed(4)}cqw * ${(0.52 * letterScale).toFixed(3)})`;
 
   return (
     <div className="flex flex-col gap-2 pb-6">

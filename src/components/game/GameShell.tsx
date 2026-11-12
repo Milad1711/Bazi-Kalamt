@@ -9,6 +9,7 @@ import { Onboarding } from './Onboarding';
 import { Lobby, type Nav } from './Lobby';
 import { WordHunter } from './WordHunter';
 import { MemoryMatch } from './MemoryMatch';
+import { WordGuess } from './WordGuess';
 import { Shop } from './Shop';
 import { Missions } from './Missions';
 import { SettingsScreen } from './SettingsScreen';
@@ -78,7 +79,7 @@ export default function GameShell() {
 
   const go = useCallback((s: Screen) => {
     setScreen(s);
-    if (s === 'word-game' || s === 'memory-game') audio.playMusic('game');
+    if (s === 'word-game' || s === 'memory-game' || s === 'guess') audio.playMusic('game');
     else audio.playMusic('lobby');
   }, []);
 
@@ -161,6 +162,7 @@ export default function GameShell() {
               initial={mmInitial}
             />
           )}
+          {screen === 'guess' && <WordGuess onBack={() => go('lobby')} />}
           {screen === 'shop' && <Shop onBack={() => go('lobby')} />}
           {screen === 'missions' && <Missions onBack={() => go('lobby')} />}
           {screen === 'settings' && <SettingsScreen onBack={() => go('lobby')} />}

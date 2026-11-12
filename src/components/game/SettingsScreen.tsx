@@ -27,7 +27,33 @@ export function SettingsScreen({ onBack }: { onBack: () => void }) {
   const resetProgress = useGame((s) => s.resetProgress);
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetDone, setResetDone] = useState(false);
-  const [idCopied, setIdCopied] = useState(false);   /* admin login */   const [adminPass, setAdminPass] = useState('');   const [adminBusy, setAdminBusy] = useState(false);   const [adminMsg, setAdminMsg] = useState<{ ok: boolean; text: string } | null>(null);       const adminLogin = async () => {     const pass = adminPass.trim();     if (!pass || adminBusy) return;     setAdminBusy(true);     setAdminMsg(null);     try {       const res = await fetch('/api/admin/stats', { headers: { 'x-admin-token': pass } });       if (res.ok) {         sessionStorage.setItem('wg-admin-token', pass);         setAdminMsg({ ok: true, text: t('adminLoggedIn') });         setTimeout(() => { window.location.href = '/admin'; }, 600);       } else {         setAdminMsg({ ok: false, text: t(res.status === 401 ? 'adminWrongPass' : 'adminConnFail') });       }     } catch {       setAdminMsg({ ok: false, text: t('adminConnFail') });     } finally {       setAdminBusy(false);     }   };
+  const [idCopied, setIdCopied] = useState(false);
+
+  // ---------- admin login (ورود مدیر — باز کردن پنل ادمین از داخل بازی) ----------
+  const [adminPass, setAdminPass] = useState('');
+  const [adminBusy, setAdminBusy] = useState(false);
+  const [adminMsg, setAdminMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const adminLogin = async () => {
+    const pass = adminPass.trim();
+    if (!pass || adminBusy) return;
+    setAdminBusy(true);
+    setAdminMsg(null);
+    try {
+      const res = await fetch('/api/admin/stats', { headers: { 'x-admin-token': pass } });
+      if (res.ok) {
+        sessionStorage.setItem('wg-admin-token', pass);
+        setAdminMsg({ ok: true, text: t('adminLoggedIn') });
+        setTimeout(() => { window.location.href = '/admin'; }, 600);
+      } else {
+        setAdminMsg({ ok: false, text: t(res.status === 401 ? 'adminWrongPass' : 'adminConnFail') });
+      }
+    } catch {
+      setAdminMsg({ ok: false, text: t('adminConnFail') });
+    } finally {
+      setAdminBusy(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3 pb-8">
@@ -127,7 +153,43 @@ export function SettingsScreen({ onBack }: { onBack: () => void }) {
         </GameButton>
       </section>
 
-      {/* admin login (ورود مدیر — باز کردن پنل ادمین از داخل بازی) */}       <section className="glass-panel p-4">         <div className="flex items-center gap-2 mb-1">           <ShieldCheck className="w-5 h-5" style={{ color: 'var(--accent)' }} />           <h3 className="font-black text-sm">{t('adminTitle')}</h3>         </div>         <p className="text-[10px] font-bold opacity-55 mb-3 leading-relaxed">{t('adminHint')}</p>         <div className="flex gap-2">           <input             type="password"             dir="ltr"             value={adminPass}             onChange={(e) => setAdminPass(e.target.value)}             onKeyDown={(e) => { if (e.key === 'Enter') adminLogin(); }}             placeholder={t('adminPassPlaceholder')}             autoComplete="off"             className="flex-1 min-w-0 rounded-xl border-2 border-white/70 bg-white/55 px-3 py-2 text-sm font-bold outline-none"             style={{ color: 'var(--ink)' }}           />           <GameButton             size="sm"             variant="gold"             className="shrink-0"             onClick={adminLogin}             disabled={adminBusy || !adminPass.trim()}           >             {adminBusy ? '…' : t('adminLogin')}           </GameButton>         </div>         {adminMsg && (           <p className="text-[11px] font-black mt-2" style={{ color: adminMsg.ok ? 'var(--green)' : 'var(--danger)' }}>             {adminMsg.text}           </p>         )}       </section>        {/* about */}
+      {/* admin login (ورود مدیر — باز کردن پنل ادمین از داخل بازی) */}
+      <section className="glass-panel p-4">
+        <div className="flex items-center gap-2 mb-1">
+          <ShieldCheck className="w-5 h-5" style={{ color: 'var(--accent)' }} />
+          <h3 className="font-black text-sm">{t('adminTitle')}</h3>
+        </div>
+        <p className="text-[10px] font-bold opacity-55 mb-3 leading-relaxed">{t('adminHint')}</p>
+        <div className="flex gap-2">
+          <input
+            type="password"
+            dir="ltr"
+            value={adminPass}
+            onChange={(e) => setAdminPass(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') adminLogin(); }}
+            placeholder={t('adminPassPlaceholder')}
+            autoComplete="off"
+            className="flex-1 min-w-0 rounded-xl border-2 border-white/70 bg-white/55 px-3 py-2 text-sm font-bold outline-none"
+            style={{ color: 'var(--ink)' }}
+          />
+          <GameButton
+            size="sm"
+            variant="gold"
+            className="shrink-0"
+            onClick={adminLogin}
+            disabled={adminBusy || !adminPass.trim()}
+          >
+            {adminBusy ? '…' : t('adminLogin')}
+          </GameButton>
+        </div>
+        {adminMsg && (
+          <p className="text-[11px] font-black mt-2" style={{ color: adminMsg.ok ? 'var(--green)' : 'var(--danger)' }}>
+            {adminMsg.text}
+          </p>
+        )}
+      </section>
+
+      {/* about */}
       <section className="glass-panel p-4 flex items-center gap-3">
         <div className="w-14 h-14 shrink-0"><LogoMark className="w-full h-full" /></div>
         <div>
