@@ -912,7 +912,7 @@ const fa: Record<DictKey, string> = {
   sizeSmall: 'کوچک',
   sizeNormal: 'متوسط',
   sizeLarge: 'بزرگ',
-  deviceId: 'شناسه دستگاه',
+  deviceId: 'شناسه دستگاه',   adminTitle: 'مدیریت بازی (ادمین)',   adminHint: 'رمز مدیر را وارد کن تا پنل مدیریت باز شود. بعد از ورود، در تب «امنیت» پنل می‌توانی رمز دائمی خودت را تعیین کنی.',   adminPassPlaceholder: 'رمز مدیر',   adminLogin: 'ورود',   adminWrongPass: 'رمز اشتباه است',   adminConnFail: 'ارتباط با سرور برقرار نشد — چند دقیقه بعد دوباره امتحان کن',   adminLoggedIn: 'خوش آمدی! پنل مدیریت باز می‌شود…',
   deviceIdHint: 'این کد را برای پشتیبانی بفرست تا بتوانند به این دستگاه سکه هدیه بدهند',
   copied: 'کپی شد!',
   serverVerifyFail: 'خرید تأیید نشد — لطفاً دوباره تلاش کن',
