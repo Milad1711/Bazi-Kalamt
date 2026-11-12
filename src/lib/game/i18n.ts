@@ -455,7 +455,7 @@ const en = {
   sizeSmall: 'Small',
   sizeNormal: 'Normal',
   sizeLarge: 'Large',
-  deviceId: 'Device ID',
+  deviceId: 'Device ID',   adminTitle: 'Game admin',   adminHint: 'Enter the admin password to open the management panel. After logging in, set your permanent password in the panel’s Security tab.',   adminPassPlaceholder: 'Admin password',   adminLogin: 'Log in',   adminWrongPass: 'Wrong password',   adminConnFail: 'Could not reach the server — try again in a minute',   adminLoggedIn: 'Welcome! Opening the admin panel…',
   deviceIdHint: 'Send this code to support — they can gift coins to this device',
   copied: 'Copied!',
   serverVerifyFail: 'Purchase could not be verified — please try again',
