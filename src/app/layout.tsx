@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "A joyful 3D brain-training game: hunt hidden words and match 3D memory cards. Two worlds of puzzles, rewards, missions and shop. بازی فکری سه‌بعدی با دو دنیای پازل.",
   applicationName: "Word Game 3D",
   manifest: "/manifest.json",
-  icons: { icon: "/icon-192.png", apple: "/icon-192.png" },
+  icons: { icon: "/icon.svg", apple: "/icon.svg" },
 };
 
 export const viewport: Viewport = {
