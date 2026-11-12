@@ -357,7 +357,7 @@ function WordGame({ nav, config, onExit }: WordGameProps) {
   };
   // letter size — bigger share of the cell so the letters are easier to read
   // (۶۲٪ اندازه سلول در حالت پیش‌فرض؛ ضریب با تنظیم فونت بازیکن تغییر می‌کند)
-  const fontSize = `calc(${100 / puzzle.size}% * ${(0.62 * letterScale).toFixed(3)})`;
+    const fontSize = `calc(${(100 / puzzle.size).toFixed(4)}cqw * ${(0.88 * letterScale).toFixed(3)})`;
 
   return (
     <div className="flex flex-col gap-2 pb-6">
