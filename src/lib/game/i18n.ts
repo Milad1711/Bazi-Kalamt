@@ -468,6 +468,18 @@ const en = {
   theme_aurora: 'Northern Lights',
   skin_vipRoyal: 'VIP Crown Gold',
   desc_skin_vipRoyal: 'Exclusive VIP skin — royal gold on deep purple',
+  // ---------- word guess mode (حالت حدس کلمه) ----------
+  worldGuessTitle: 'Word Guess',
+  worldGuessDesc: 'First & last letter given — guess the middle!',
+  guessHowTo: 'Fill the blanks with the letter bank',
+  guessHowToDetail: 'First and last letters are fixed. Tap bank letters to fill the blanks — tap a filled slot to take the letter back. Longer streak = bigger coin bonus!',
+  guessCheck: 'Check',
+  guessClear: 'Clear',
+  guessCorrect: 'Correct!',
+  guessWrong: 'Not quite — try again!',
+  guessPickLetter: 'Tap letters below to fill the blanks',
+  guessSolved: 'Solved',
+  guessStreak: 'Streak',
 } as const;
 
 export type DictKey = keyof typeof en;
@@ -925,6 +937,18 @@ const fa: Record<DictKey, string> = {
   theme_aurora: 'شفق شمالی',
   skin_vipRoyal: 'طلای تاج VIP',
   desc_skin_vipRoyal: 'اسکین اختصاصی VIP — طلای سلطنتی روی بنفش عمیق',
+  // ---------- حالت حدس کلمه ----------
+  worldGuessTitle: 'حدس کلمه',
+  worldGuessDesc: 'حرف اول و آخر معلوم است — وسط کلمه را حدس بزن!',
+  guessHowTo: 'جای خالی‌ها را با بانک حروف پر کن',
+  guessHowToDetail: 'حرف اول و آخر کلمه معلوم است. از بانک حروف پایین روی حرف‌ها بزن تا جای خالی‌ها پر شود — اگر حرف اشتباه گذاشتی، روی همان خانه بزن تا برگردد. هرچه زنجیره درست‌ها طولانی‌تر شود، سکه بیشتری می‌گیری!',
+  guessCheck: 'بررسی',
+  guessClear: 'پاک کردن',
+  guessCorrect: 'آفرین! درست بود',
+  guessWrong: 'درست نیست — دوباره تلاش کن!',
+  guessPickLetter: 'از حروف پایین برای پر کردن جای خالی‌ها انتخاب کن',
+  guessSolved: 'حل‌شده',
+  guessStreak: 'زنجیره',
 };
 
 export const DICT: Record<Lang, Record<DictKey, string>> = { en, fa };

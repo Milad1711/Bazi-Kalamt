@@ -8,6 +8,7 @@ export type Screen =
   | 'word-game'
   | 'memory-select'
   | 'memory-game'
+  | 'guess'
   | 'shop'
   | 'missions'
   | 'settings'
